@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Meta refresh acts as a fallback redirect if JavaScript is disabled -->
+    <meta http-equiv="refresh" content="5;url=https://rolloutgame.app/">
+    <title>The game moved!</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: system-ui, -apple-system, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        p {
+            font-size: 1.25rem;
+            color: #b3b3b3;
+        }
+        a {
+            color: #4da6ff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .export-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            color: #121212;
+            background-color: #4da6ff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+        .export-btn:hover {
+            background-color: #3388dd;
+        }
+    </style>
+</head>
+<body>
+    <h1>The game moved!</h1>
+    <p>Redirected in <span id="countdown">5</span>...</p>
+    <p><small>If you are not redirected automatically, <a href="https://rolloutgame.app/">click here</a>.</small></p>
+
+    <!-- New Export Button -->
+    <button id="exportBtn" class="export-btn">Export old save</button>
+
+    <script>
+        let timeLeft = 5;
+        const countdownElement = document.getElementById('countdown');
+        
+        // Timer logic
+        const timer = setInterval(() => {
+            timeLeft -= 1;
+            countdownElement.textContent = timeLeft;
+            
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                window.location.href = "https://rolloutgame.app/";
+            }
+        }, 1000);
+
+        // Export save logic
+        document.getElementById('exportBtn').addEventListener('click', () => {
+            const raw = localStorage.getItem('rollout-fs-manager-save-v1');
+            
+            if (!raw) {
+                console.log('No Rollout save here in this browser.');
+                alert('No Rollout save found in this browser.');
+            } else { 
+                const a = document.createElement('a'); 
+                a.href = URL.createObjectURL(new Blob([raw], { type: 'application/json' })); 
+                a.download = 'rollout-save.json'; 
+                a.click(); 
+                console.log('Saved: rollout-save.json'); 
+            }
+        });
+    </script>
+</body>
+</html>
